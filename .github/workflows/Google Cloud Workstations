@@ -1,0 +1,1215 @@
+# Google Cloud Workstations Authentication & Management
+
+Berikut adalah dokumentasi lengkap untuk Google Cloud Workstations authentication, management, dan troubleshooting:
+
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Cloud Workstations - Complete Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <style>
+        :root {
+            --primary: #4285F4;
+            --secondary: #34A853;
+            --accent: #EA4335;
+            --warning: #FBBC05;
+            --dark: #202124;
+            --light: #f8f9fa;
+            --gray: #5f6368;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(32, 33, 36, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: #e8eaed;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            text-align: center;
+            background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" opacity="0.1"><polygon fill="white" points="0,1000 1000,0 1000,1000"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            opacity: 0.9;
+        }
+
+        /* Documentation Layout */
+        .doc-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 3rem;
+            margin: 3rem 0;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .sidebar h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 0.8rem;
+        }
+
+        .sidebar a {
+            color: var(--dark);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar a:hover {
+            color: var(--primary);
+        }
+
+        .content {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .section-title i {
+            margin-right: 15px;
+            font-size: 2rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* URL Analysis */
+        .url-analysis {
+            background: #f1f8ff;
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            word-break: break-all;
+        }
+
+        .url-part {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid var(--primary);
+        }
+
+        /* Code Container */
+        .code-container {
+            background: #1a1a1a;
+            color: #abb2bf;
+            border-radius: 10px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-container pre {
+            margin: 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .copy-btn:hover {
+            background: #3367d6;
+        }
+
+        /* Workflow Steps */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .step-content p {
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        /* Troubleshooting Grid */
+        .troubleshooting-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .issue-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        .issue-card h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .issue-card.warning h4 {
+            color: var(--warning);
+        }
+
+        .issue-card.danger h4 {
+            color: var(--accent);
+        }
+
+        /* Status Indicators */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: #e6f4ea;
+            color: var(--secondary);
+        }
+
+        .status-warning {
+            background: #fef7e0;
+            color: var(--warning);
+        }
+
+        .status-danger {
+            background: #fce8e6;
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(32, 33, 36, 0.95);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .doc-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+                order: 2;
+            }
+            
+            .content {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 150px 0 80px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.3rem;
+            }
+
+            .content {
+                padding: 2rem;
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fab fa-google"></i>
+                    <span>Cloud Workstations</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#authentication">Authentication</a>
+                    <a href="#url-analysis">URL Analysis</a>
+                    <a href="#troubleshooting">Troubleshooting</a>
+                    <a href="#gcloud-commands">gcloud Commands</a>
+                    <a href="#best-practices">Best Practices</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Google Cloud Workstations</h1>
+            <p>Complete Authentication & Management Documentation</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="doc-container">
+            <!-- Sidebar Navigation -->
+            <div class="sidebar">
+                <h3><i class="fas fa-bookmark"></i> Documentation</h3>
+                <ul>
+                    <li><a href="#authentication"><i class="fas fa-key"></i> Authentication Flow</a></li>
+                    <li><a href="#url-analysis"><i class="fas fa-link"></i> URL Analysis</a></li>
+                    <li><a href="#state-decoding"><i class="fas fa-code"></i> State Parameter</a></li>
+                    <li><a href="#troubleshooting"><i class="fas fa-tools"></i> Troubleshooting</a></li>
+                    <li><a href="#gcloud-commands"><i class="fas fa-terminal"></i> gcloud Commands</a></li>
+                    <li><a href="#api-reference"><i class="fas fa-code"></i> API Reference</a></li>
+                    <li><a href="#best-practices"><i class="fas fa-check-circle"></i> Best Practices</a></li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="content">
+                <!-- Authentication Section -->
+                <section id="authentication">
+                    <h2 class="section-title"><i class="fas fa-key"></i> Authentication Flow</h2>
+                    
+                    <div class="card">
+                        <h3>Google Cloud Workstations Authentication Process</h3>
+                        <p>Cloud Workstations menggunakan OAuth 2.0 flow untuk mengautentikasi pengguna dan mengarahkan mereka ke workstation yang tepat.</p>
+                        
+                        <div class="steps-container">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Authentication Request</h3>
+                                    <p>User mengakses URL authentication yang berisi parameter state terenkripsi</p>
+                                    <div class="code-container">
+                                        <pre><code class="language-http">
+GET /ui/auth?state=ENCODED_STATE_PARAMETER
+Host: workstations.cloud.google.com
+                                        </code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>OAuth 2.0 Flow</h3>
+                                    <p>System mengarahkan user ke Google OAuth untuk autentikasi</p>
+                                    <div class="code-container">
+                                        <pre><code class="language-http">
+GET /o/oauth2/v2/auth
+?response_type=code
+&client_id=CLIENT_ID
+&redirect_uri=REDIRECT_URI
+&state=ENCODED_STATE
+&scope=email+profile
+                                        </code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>Token Exchange</h3>
+                                    <p>Setelah autentikasi berhasil, system menukar authorization code dengan access token</p>
+                                    <div class="code-container">
+                                        <pre><code class="language-http">
+POST /token
+Content-Type: application/x-www-form-urlencoded
+
+code=AUTHORIZATION_CODE
+&client_id=CLIENT_ID
+&client_secret=CLIENT_SECRET
+&redirect_uri=REDIRECT_URI
+&grant_type=authorization_code
+                                        </code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h3>Workstation Access</h3>
+                                    <p>Access token digunakan untuk mengakses workstation target</p>
+                                    <div class="code-container">
+                                        <pre><code class="language-http">
+GET /workstations/ENDPOINT
+Authorization: Bearer ACCESS_TOKEN
+                                        </code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- URL Analysis Section -->
+                <section id="url-analysis">
+                    <h2 class="section-title"><i class="fas fa-link"></i> URL Analysis</h2>
+                    
+                    <div class="card">
+                        <h3>Authentication URL Breakdown</h3>
+                        <p>Berikut adalah analisis lengkap dari URL authentication Cloud Workstations:</p>
+                        
+                        <div class="url-analysis">
+                            <div class="url-part">
+                                <strong>Base URL:</strong> https://workstations.cloud.google.com/ui/auth
+                            </div>
+                            <div class="url-part">
+                                <strong>State Parameter:</strong> eyJ0b2tlbiI6IlVEa1FVM3hFODc3N1FzMW1SSUdwcXciLCJ0YXJnZXRfaG9zdCI6IjYwMDAtaWR4LXN0dWRpby0xNzQ2MTQ3MDAzNzEzLmNsdXN0ZXItemttMmpyd2JuYmQ0YXd1ZWRjMmFscXhycGsuY2xvdWR3b3Jrc3RhdGlvbnMuZGV2IiwiYXV0aHVzZXIiOiIiLCJ3b3Jrc3RhdGlvbl9uYW1lIjoicHJvamVjdHMvbW9ub3NwYWNlLTEwL2xvY2F0aW9ucy9hc2lhLWVhc3QxL3dvcmtzdGF0aW9uQ2x1c3RlcnMvd29ya3N0YXRpb24tY2x1c3Rlci01L3dvcmtzdGF0aW9uQ29uZmlncy9tb25vc3BhY2UtY29uZmlnLXdlYi93b3Jrc3RhdGlvbnMvaWR4LXN0dWRpby0xNzQ2MTQ3MDAzNzEzIiwid29ya3N0YXRpb25fY29uc3VtZXJfcHJvamVjdF9udW1iZXIiOiI3MTI2MDU5MjA2NzEifQ
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- State Decoding Section -->
+                <section id="state-decoding">
+                    <h2 class="section-title"><i class="fas fa-code"></i> State Parameter Analysis</h2>
+                    
+                    <div class="card">
+                        <h3>Decoded State Parameter</h3>
+                        <p>Parameter state berisi informasi terenkripsi tentang workstation target:</p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span>Decoded State JSON</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <pre><code class="language-json">
+{
+  "token": "UDkQU3xE8777Qs1mRIGpqw",
+  "target_host": "6000-idx-studio-1746147003713.cluster-zkm2jrwbnbdd4awuedc2alqxrpk.cloudworkstations.dev",
+  "authuser": "",
+  "workstation_name": "projects/monospace-10/locations/asia-east1/workstationClusters/workstation-cluster-5/workstationConfigs/monospace-config-web/workstations/idx-studio-1746147003713",
+  "workstation_consumer_project_number": "712605920671"
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Workstation Resource Structure</h3>
+                        <p>Workstation name mengikuti struktur resource Google Cloud yang standar:</p>
+                        
+                        <div class="code-container">
+                            <pre><code class="language-bash">
+projects/{PROJECT_ID}/locations/{REGION}/workstationClusters/{CLUSTER_NAME}/workstationConfigs/{CONFIG_NAME}/workstations/{WORKSTATION_NAME}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="steps-container">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Project ID</h3>
+                                    <p><strong>monospace-10</strong> - Project Google Cloud tempat workstation berada</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>Region</h3>
+                                    <p><strong>asia-east1</strong> - Region tempat workstation cluster deployed</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>Cluster</h3>
+                                    <p><strong>workstation-cluster-5</strong> - Cluster yang mengelola workstation</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h3>Configuration</h3>
+                                    <p><strong>monospace-config-web</strong> - Konfigurasi spesifik workstation</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">5</div>
+                                <div class="step-content">
+                                    <h3>Workstation</h3>
+                                    <p><strong>idx-studio-1746147003713</strong> - Nama spesifik workstation instance</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Troubleshooting Section -->
+                <section id="troubleshooting">
+                    <h2 class="section-title"><i class="fas fa-tools"></i> Troubleshooting</h2>
+                    
+                    <div class="troubleshooting-grid">
+                        <div class="issue-card">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Authentication Failed</h4>
+                            <p>Token authentication gagal atau expired</p>
+                            <div class="code-container">
+                                <pre><code class="language-bash">
+# Generate new access token
+gcloud auth login
+gcloud config set project monospace-10
+                                </code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="issue-card warning">
+                            <h4><i class="fas fa-clock"></i> Token Expired</h4>
+                            <p>Authentication token sudah kadaluarsa</p>
+                            <div class="code-container">
+                                <pre><code class="language-bash">
+# Refresh authentication token
+gcloud auth application-default login
+gcloud auth print-access-token
+                                </code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="issue-card danger">
+                            <h4><i class="fas fa-unlink"></i> Invalid URL</h4>
+                            <p>URL authentication tidak valid atau corrupt</p>
+                            <div class="code-container">
+                                <pre><code class="language-bash">
+# Generate new workstation URL
+gcloud workstations start idx-studio-1746147003713 \
+  --cluster=workstation-cluster-5 \
+  --config=monospace-config-web \
+  --region=asia-east1
+                                </code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="issue-card">
+                            <h4><i class="fas fa-ban"></i> Permission Denied</h4>
+                            <p>User tidak memiliki akses ke workstation</p>
+                            <div class="code-container">
+                                <pre><code class="language-bash">
+# Check IAM permissions
+gcloud workstations list --region=asia-east1
+gcloud projects get-iam-policy monospace-10
+                                </code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Common Error Messages & Solutions</h3>
+                        <div class="steps-container">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>"Invalid authentication token"</h3>
+                                    <p><strong>Solution:</strong> Generate new authentication token menggunakan gcloud CLI</p>
+                                    <div class="code-container">
+                                        <pre><code class="language-bash">
+gcloud auth login --update-adc
+                                        </code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>"Workstation not found"</h3>
+                                    <p><strong>Solution:</strong> Periksa status workstation dan start jika diperlukan</p>
+                                    <div class="code-container">
+                                        <pre><code class="language-bash">
+gcloud workstations describe idx-studio-1746147003713 \
+  --cluster=workstation-cluster-5 \
+  --config=monospace-config-web \
+  --region=asia-east1
+                                        </code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>"Permission denied"</h3>
+                                    <p><strong>Solution:</strong> Request akses workstation dari project administrator</p>
+                                    <div class="code-container">
+                                        <pre><code class="language-bash">
+# Request necessary roles
+gcloud projects add-iam-policy-binding monospace-10 \
+  --member=user:YOUR_EMAIL@gmail.com \
+  --role=roles/workstations.user
+                                        </code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- gcloud Commands Section -->
+                <section id="gcloud-commands">
+                    <h2 class="section-title"><i class="fas fa-terminal"></i> gcloud Commands</h2>
+                    
+                    <div class="card">
+                        <h3>Essential Workstation Commands</h3>
+                        <p>Kumpulan perintah gcloud untuk mengelola Cloud Workstations:</p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span>Workstation Management Commands</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <pre><code class="language-bash">
+# List available workstations
+gcloud workstations list \
+  --cluster=workstation-cluster-5 \
+  --config=monospace-config-web \
+  --region=asia-east1
+
+# Describe specific workstation
+gcloud workstations describe idx-studio-1746147003713 \
+  --cluster=workstation-cluster-5 \
+  --config=monospace-config-web \
+  --region=asia-east1
+
+# Start workstation
+gcloud workstations start idx-studio-1746147003713 \
+  --cluster=workstation-cluster-5 \
+  --config=monospace-config-web \
+  --region=asia-east1
+
+# Stop workstation  
+gcloud workstations stop idx-studio-1746147003713 \
+  --cluster=workstation-cluster-5 \
+  --config=monospace-config-web \
+  --region=asia-east1
+
+# Generate authentication URL
+gcloud workstations create-read-only-session idx-studio-1746147003713 \
+  --cluster=workstation-cluster-5 \
+  --config=monospace-config-web \
+  --region=asia-east1
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Advanced Configuration</h3>
+                        <p>Perintah untuk konfigurasi workstation yang lebih advanced:</p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span>Advanced Configuration</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <pre><code class="language-bash">
+# Update workstation configuration
+gcloud workstations configs update monospace-config-web \
+  --cluster=workstation-cluster-5 \
+  --region=asia-east1 \
+  --machine-type=e2-standard-4 \
+  --disk-size=100GB
+
+# Set idle timeout
+gcloud workstations configs update monospace-config-web \
+  --cluster=workstation-cluster-5 \
+  --region=asia-east1 \
+  --idle-timeout=6h
+
+# Configure container image
+gcloud workstations configs update monospace-config-web \
+  --cluster=workstation-cluster-5 \
+  --region=asia-east1 \
+  --container-custom-image=us-docker.pkg.dev/your-project/workstation-image:latest
+                            </code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- API Reference Section -->
+                <section id="api-reference">
+                    <h2 class="section-title"><i class="fas fa-code"></i> API Reference</h2>
+                    
+                    <div class="card">
+                        <h3>REST API Endpoints</h3>
+                        <p>Cloud Workstations REST API untuk integrasi dan automation:</p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span>Generate Access Token</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <pre><code class="language-http">
+POST https://workstations.googleapis.com/v1/projects/monospace-10/locations/asia-east1/workstationClusters/workstation-cluster-5/workstationConfigs/monospace-config-web/workstations/idx-studio-1746147003713:generateAccessToken
+
+Authorization: Bearer ya29.Ac...
+Content-Type: application/json
+
+{
+  "expireTime": "2024-01-15T00:00:00Z",
+  "ttl": "3600s"
+}
+                            </code></pre>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span>Get Workstation Status</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <pre><code class="language-http">
+GET https://workstations.googleapis.com/v1/projects/monospace-10/locations/asia-east1/workstationClusters/workstation-cluster-5/workstationConfigs/monospace-config-web/workstations/idx-studio-1746147003713
+
+Authorization: Bearer ya29.Ac...
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Python Client Library</h3>
+                        <p>Contoh penggunaan Python client library untuk Cloud Workstations:</p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span>workstations.py</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <pre><code class="language-python">
+from google.cloud import workstations_v1
+from google.oauth2 import service_account
+
+def get_workstation_client():
+    credentials = service_account.Credentials.from_service_account_file(
+        'path/to/service-account-key.json'
+    )
+    return workstations_v1.WorkstationsClient(credentials=credentials)
+
+def start_workstation(project_id, region, cluster_id, config_id, workstation_id):
+    client = get_workstation_client()
+    
+    workstation_name = f"projects/{project_id}/locations/{region}/workstationClusters/{cluster_id}/workstationConfigs/{config_id}/workstations/{workstation_id}"
+    
+    operation = client.start_workstation(name=workstation_name)
+    response = operation.result(timeout=300)
+    
+    print(f"Workstation {workstation_id} started successfully")
+    return response
+
+# Usage
+start_workstation(
+    project_id="monospace-10",
+    region="asia-east1",
+    cluster_id="workstation-cluster-5",
+    config_id="monospace-config-web",
+    workstation_id="idx-studio-1746147003713"
+)
+                            </code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Best Practices Section -->
+                <section id="best-practices">
+                    <h2 class="section-title"><i class="fas fa-check-circle"></i> Best Practices</h2>
+                    
+                    <div class="card">
+                        <h3>Security & Authentication Best Practices</h3>
+                        <div class="steps-container">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Use Short-Lived Tokens</h3>
+                                    <p>Generate access tokens dengan waktu kadaluarsa yang pendek untuk keamanan maksimal</p>
+                                    <div class="code-container">
+                                        <pre><code class="language-bash">
+# Generate token with 1-hour expiry
+gcloud auth print-access-token --ttl=3600
+                                        </code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>Implement IAM Best Practices</h3>
+                                    <p>Gunakan principle of least privilege untuk workstation access</p>
+                                    <div class="code-container">
+                                        <pre><code class="language-bash">
+# Assign minimal required roles
+gcloud projects add-iam-policy-binding monospace-10 \
+  --member=user:developer@company.com \
+  --role=roles/workstations.user
+                                        </code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>Monitor Workstation Usage</h3>
+                                    <p>Setup monitoring dan alerting untuk workstation activity</p>
+                                    <div class="code-container">
+                                        <pre><code class="language-bash">
+# Check workstation operations
+gcloud workstations operations list \
+  --cluster=workstation-cluster-5 \
+  --region=asia-east1
+                                        </code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h3>Regular Maintenance</h3>
+                                    <p>Schedule regular workstation updates dan maintenance windows</p>
+                                    <div class="code-container">
+                                        <pre><code class="language-bash">
+# Update workstation configuration
+gcloud workstations configs update monospace-config-web \
+  --cluster=workstation-cluster-5 \
+  --region=asia-east1 \
+  --enable-audit-agent
+                                        </code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <h3 style="font-size: 2rem; margin-bottom: 1rem;">Google Cloud Workstations</h3>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.8;">Complete Authentication & Management Guide</p>
+            
+            <div class="social-links">
+                <a href="#"><i class="fab fa-google"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-google-cloud"></i></a>
+                <a href="#"><i class="fas fa-book"></i></a>
+            </div>
+            
+            <p style="margin-top: 2rem; opacity: 0.7;">&copy; 2025 Google Cloud Documentation. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize code highlighting
+        hljs.highlightAll();
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(32, 33, 36, 0.98)';
+            } else {
+                header.style.background = 'rgba(32, 33, 36, 0.95)';
+            }
+        });
+
+        // Copy code functionality
+        function copyCode(button) {
+            const codeContainer = button.closest('.code-container');
+            const codeElement = codeContainer.querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Visual feedback
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        }
+
+        // Animation for cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe cards for animation
+        document.querySelectorAll('.card, .step, .issue-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Decode base64 state parameter (for demonstration)
+        function decodeState() {
+            const stateParam = 'eyJ0b2tlbiI6IlVEa1FVM3hFODc3N1FzMW1SSUdwcXciLCJ0YXJnZXRfaG9zdCI6IjYwMDAtaWR4LXN0dWRpby0xNzQ2MTQ3MDAzNzEzLmNsdXN0ZXItemttMmpyd2JuYmQ0YXd1ZWRjMmFscXhycGsuY2xvdWR3b3Jrc3RhdGlvbnMuZGV2IiwiYXV0aHVzZXIiOiIiLCJ3b3Jrc3RhdGlvbl9uYW1lIjoicHJvamVjdHMvbW9ub3NwYWNlLTEwL2xvY2F0aW9ucy9hc2lhLWVhc3QxL3dvcmtzdGF0aW9uQ2x1c3RlcnMvd29ya3N0YXRpb24tY2x1c3Rlci01L3dvcmtzdGF0aW9uQ29uZmlncy9tb25vc3BhY2UtY29uZmlnLXdlYi93b3Jrc3RhdGlvbnMvaWR4LXN0dWRpby0xNzQ2MTQ3MDAzNzEzIiwid29ya3N0YXRpb25fY29uc3VtZXJfcHJvamVjdF9udW1iZXIiOiI3MTI2MDU5MjA2NzEifQ';
+            try {
+                const decoded = JSON.parse(atob(stateParam));
+                console.log('Decoded State:', decoded);
+                return decoded;
+            } catch (e) {
+                console.error('Error decoding state:', e);
+                return null;
+            }
+        }
+
+        // Initialize decoding on load
+        document.addEventListener('DOMContentLoaded', decodeState);
+    </script>
+</body>
+</html>
+```
+
+## Google Cloud Workstations Documentation Features:
+
+### 🔐 **Authentication & Security**
+- **OAuth 2.0 Flow**: Complete authentication process documentation
+- **Token Management**: Access token generation and refresh procedures
+- **Security Best Practices**: IAM roles and permission management
+
+### 🔍 **URL Analysis & Decoding**
+- **State Parameter Decoding**: Detailed breakdown of the encoded state parameter
+- **Workstation Resource Structure**: Understanding the Google Cloud resource hierarchy
+- **Target Host Analysis**: Workstation endpoint configuration
+
+### 🛠️ **Troubleshooting & Diagnostics**
+- **Common Error Solutions**: Authentication failures, token expiry, permission issues
+- **gcloud Commands**: Essential commands for workstation management
+- **API Integration**: REST API and Python client examples
+
+### ⚙️ **Management & Operations**
+- **Workstation Lifecycle**: Start, stop, and monitor workstation instances
+- **Configuration Management**: Machine types, disk sizes, and container images
+- **Monitoring & Maintenance**: Operations monitoring and regular maintenance
+
+### 📋 **Key Components Documented**
+
+#### **1. Authentication Flow**
+- OAuth 2.0 implementation details
+- Token exchange mechanisms
+- Security considerations
+
+#### **2. Workstation Configuration**
+- Resource naming conventions
+- Regional deployment strategies
+- Performance optimization
+
+#### **3. API Integration**
+- REST API endpoints
+- Python client library examples
+- Automation workflows
+
+#### **4. Operational Excellence**
+- Monitoring and alerting
+- Cost optimization
+- Security hardening
+
+Dokumentasi ini memberikan panduan lengkap untuk mengautentikasi, mengelola, dan memecahkan masalah Google Cloud Workstations dengan contoh kode dan best practices yang praktis.
